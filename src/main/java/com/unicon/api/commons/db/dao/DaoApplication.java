@@ -101,12 +101,22 @@ public abstract class DaoApplication<T, U> extends DaoBase<T, U> {
         try {
             ResourceBundle bundle = ResourceBundle.getBundle("application");
             Properties defaultProps = new Properties();
-            String urlFormat = bundle.getString("database.test.url");
-            String url = String.format(urlFormat,
-                    bundle.getString("database.test.server"),
-                    bundle.getString("database.test.port"),
-                    bundle.getString("database.test.dbname"));
-            defaultProps.put("driver", bundle.getString("database.test.driver"));
+            
+            String urlFormat, url;
+            if (bundle.getString("database.test.port").isEmpty()) {
+                urlFormat = bundle.getString("database.format.url");
+                url = String.format(urlFormat,
+                        bundle.getString("database.test.server"),
+                        bundle.getString("database.test.dbname"));
+            } else {
+                urlFormat = bundle.getString("database.format.url.port");
+                url = String.format(urlFormat,
+                        bundle.getString("database.test.server"),
+                        bundle.getString("database.test.port"),
+                        bundle.getString("database.test.dbname"));
+            }
+            
+            defaultProps.put("driver", bundle.getString("database.driver.name"));
             defaultProps.put("url", url);
             defaultProps.put("username", bundle.getString("database.test.username"));
             defaultProps.put("password", bundle.getString("database.test.password"));
@@ -135,12 +145,22 @@ public abstract class DaoApplication<T, U> extends DaoBase<T, U> {
         try {
             ResourceBundle bundle = ResourceBundle.getBundle("application");
             Properties defaultProps = new Properties();
-            String urlFormat = bundle.getString("database.test.url");
-            String url = String.format(urlFormat,
-                    bundle.getString(environment+".database.test.server"),
-                    bundle.getString(environment+".database.test.port"),
-                    bundle.getString(environment+".database.test.dbname"));
-            defaultProps.put("driver", bundle.getString("database.test.driver"));
+
+            String urlFormat, url;
+            if (bundle.getString(environment+".database.test.port").isEmpty()) {
+                urlFormat = bundle.getString("database.format.url");
+                url = String.format(urlFormat,
+                        bundle.getString(environment+".database.test.server"),
+                        bundle.getString(environment+".database.test.dbname"));
+            } else {
+                urlFormat = bundle.getString("database.format.url.port");
+                url = String.format(urlFormat,
+                        bundle.getString(environment+".database.test.server"),
+                        bundle.getString(environment+".database.test.port"),
+                        bundle.getString(environment+".database.test.dbname"));
+            }
+            
+            defaultProps.put("driver", bundle.getString("database.driver.name"));
             defaultProps.put("url", url);
             defaultProps.put("username", bundle.getString(environment+".database.test.username"));
             defaultProps.put("password", bundle.getString(environment+".database.test.password"));
