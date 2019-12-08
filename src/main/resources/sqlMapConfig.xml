@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <settings>
+        <setting name="autoMappingBehavior" value="FULL"/>
+        <setting name="defaultExecutorType" value="SIMPLE"/>
+        <setting name="defaultStatementTimeout" value="300"/>
+        <setting name="jdbcTypeForNull" value="NULL"/>
+        <setting name="logImpl" value="LOG4J2"/>
+        <setting name="multipleResultSetsEnabled" value="true"/>
+    </settings>
+
+<!--    <typeAliases>-->
+<!--        <typeAlias alias="basebean" type="com.unicon.bean.BaseBean"/>-->
+<!--        <package name="com.unicon.cs.bean"/>-->
+<!--    </typeAliases>-->
+
+    <environments default="single">
+        <environment id="single">
+            <transactionManager type="JDBC"/>
+            <dataSource type="JNDI">
+                <property name="data_source" value="jdbc/SF-SDC-TOAT"/>
+            </dataSource>
+        </environment>
+        <environment id="1-sdc">
+            <transactionManager type="JDBC"/>
+            <dataSource type="JNDI">
+                <property name="data_source" value="jdbc/SF-SDC-UNI"/>
+            </dataSource>
+        </environment>
+        <environment id="2-sdc">
+            <transactionManager type="JDBC"/>
+            <dataSource type="JNDI">
+                <property name="data_source" value="jdbc/SF-SDC-CMX"/>
+            </dataSource>
+        </environment>
+        <environment id="1-cmd">
+            <transactionManager type="JDBC"/>
+            <dataSource type="JNDI">
+                <property name="data_source" value="jdbc/SF-CMD-UNI"/>
+            </dataSource>
+        </environment>
+        <environment id="2-cmd">
+            <transactionManager type="JDBC"/>
+            <dataSource type="JNDI">
+                <property name="data_source" value="jdbc/SF-CMD-CMX"/>
+            </dataSource>
+        </environment>
+        <environment id="pooled">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="${driver}"/>
+                <property name="url" value="${url}"/>
+                <property name="username" value="${username}"/>
+                <property name="password" value="${password}"/>
+                <property name="poolMaximumActiveConnections" value="100"/>
+                <property name="poolMaximumIdleConnections" value="10"/>
+                <property name="poolMaximumCheckoutTime" value="120000"/>
+                <property name="poolTimeToWait" value="60000"/>
+                <property name="poolPingQuery" value="select 1;"/>
+                <property name="poolPingEnabled" value="false"/>
+                <property name="poolPingConnectionsNotUsedFor" value="0"/>
+            </dataSource>
+        </environment>
+        <environment id="junit">
+            <transactionManager type="JDBC"/>
+            <dataSource type="UNPOOLED">
+                <property name="driver" value="${driver}"/>
+                <property name="url" value="${url}"/>
+                <property name="username" value="${username}"/>
+                <property name="password" value="${password}"/>
+            </dataSource>
+        </environment>
+    </environments>
+
+    <mappers>
+        <mapper class="com.unicon.api.commons.db.dao.mapper.AppMapper"/>
+<!--        <mapper resource="com/unicon/api/commons/db/dao/xml/AppMapper.xml" />-->
+    </mappers>
+</configuration>
