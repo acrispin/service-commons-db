@@ -14,33 +14,45 @@
         </Console>
     </Appenders>
     <Loggers>
+        <Logger name="org.apache.ibatis" level="error" additivity="false">
+            <AppenderRef ref="RollingFile"/>
+            <AppenderRef ref="Console"/>
+        </Logger>
+        <Logger name="org.apache.ibatis.logging.jdbc" level="error" additivity="false">
+            <AppenderRef ref="RollingFile"/>
+            <AppenderRef ref="Console"/>
+        </Logger>
+        <Logger name="java.sql" level="error" additivity="false">
+            <AppenderRef ref="RollingFile"/>
+            <AppenderRef ref="Console"/>
+        </Logger>
+        <Logger name="org.springframework.boot" level="info" additivity="false">
+            <AppenderRef ref="RollingFile"/>
+            <AppenderRef ref="Console"/>
+        </Logger>
+        <Logger name="org.springframework.test.context" level="info" additivity="false">
+            <AppenderRef ref="RollingFile"/>
+            <AppenderRef ref="Console"/>
+        </Logger>
+        <Logger name="org.springframework.beans.factory.support" level="info" additivity="false">
+            <AppenderRef ref="RollingFile"/>
+            <AppenderRef ref="Console"/>
+        </Logger>
+        <Logger name="org.apache.http" level="error" additivity="false">
+            <AppenderRef ref="RollingFile"/>
+            <AppenderRef ref="Console"/>
+        </Logger>
+        <Logger name="org.hibernate.validator" level="error" additivity="false">
+            <AppenderRef ref="RollingFile"/>
+            <AppenderRef ref="Console"/>
+        </Logger>
+        <Logger name="com.netflix.discovery" level="error" additivity="false">
+            <AppenderRef ref="RollingFile"/>
+            <AppenderRef ref="Console"/>
+        </Logger>
         <Root level="DEBUG">
             <AppenderRef ref="RollingFile"/>
             <AppenderRef ref="Console"/>
         </Root>
-        <Logger name="org.apache.ibatis" level="ERROR" additivity="false">
-            <AppenderRef ref="RollingFile"/>
-            <AppenderRef ref="Console"/>
-        </Logger>
-        <Logger name="org.apache.ibatis.logging.jdbc" level="ERROR" additivity="false">
-            <AppenderRef ref="RollingFile"/>
-            <AppenderRef ref="Console"/>
-        </Logger>
-        <Logger name="java.sql" level="ERROR" additivity="false">
-            <AppenderRef ref="RollingFile"/>
-            <AppenderRef ref="Console"/>
-        </Logger>
-        <Logger name="org.springframework.boot" level="error" additivity="false">
-            <AppenderRef ref="RollingFile"/>
-            <AppenderRef ref="Console"/>
-        </Logger>
-        <Logger name="org.springframework.test.context" level="error" additivity="false">
-            <AppenderRef ref="RollingFile"/>
-            <AppenderRef ref="Console"/>
-        </Logger>
-        <Logger name="org.springframework.beans.factory.support" level="error" additivity="false">
-            <AppenderRef ref="RollingFile"/>
-            <AppenderRef ref="Console"/>
-        </Logger>
     </Loggers>
 </Configuration>
