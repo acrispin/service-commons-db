@@ -284,13 +284,8 @@ public abstract class DaoGeneric<U> {
             } else {
                 result = (V) method.invoke(mapper);
             }
-        } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException ex) {
+        } catch (PersistenceException | NullPointerException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
             getLogger().error(ex.getMessage(), ex);
-        } catch (InvocationTargetException | PersistenceException | NullPointerException pex) {
-            if (getLogger().isDebugEnabled()) {
-                getLogger().debug("Error wrapper: %s", pex.getMessage());
-            }
-            getLogger().error(pex.getCause().getMessage(), pex.getCause());
         }
         return result;
     }
@@ -321,8 +316,10 @@ public abstract class DaoGeneric<U> {
                 }
             }
             return result;
+        } catch (PersistenceException | NullPointerException ex) {
+            getLogger().error(ex.getMessage(), ex);
+            throw ex;
         }
-
     }
 
     /**
@@ -345,13 +342,8 @@ public abstract class DaoGeneric<U> {
             } else {
                 result = (T) method.invoke(mapper);
             }
-        } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException ex) {
+        } catch (PersistenceException | NullPointerException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
             getLogger().error(ex.getMessage(), ex);
-        } catch (InvocationTargetException | PersistenceException | NullPointerException pex) {
-            if (getLogger().isDebugEnabled()) {
-                getLogger().debug("Error wrapper: %s", pex.getMessage());
-            }
-            getLogger().error(pex.getCause().getMessage(), pex.getCause());
         }
         return result;
     }
@@ -379,7 +371,10 @@ public abstract class DaoGeneric<U> {
                 }
             }
             return result;
+        } catch (PersistenceException | NullPointerException ex) {
+            getLogger().error(ex.getMessage(), ex);
+            throw ex;
         }
-
     }
+
 }
