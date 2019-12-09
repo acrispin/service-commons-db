@@ -286,7 +286,7 @@ public abstract class DaoGeneric<U> {
             }
         } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException ex) {
             getLogger().error(ex.getMessage(), ex);
-        } catch (InvocationTargetException | PersistenceException pex) {
+        } catch (InvocationTargetException | PersistenceException | NullPointerException pex) {
             if (getLogger().isDebugEnabled()) {
                 getLogger().debug("Error wrapper: %s", pex.getMessage());
             }
@@ -347,7 +347,7 @@ public abstract class DaoGeneric<U> {
             }
         } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException ex) {
             getLogger().error(ex.getMessage(), ex);
-        } catch (InvocationTargetException | PersistenceException pex) {
+        } catch (InvocationTargetException | PersistenceException | NullPointerException pex) {
             if (getLogger().isDebugEnabled()) {
                 getLogger().debug("Error wrapper: %s", pex.getMessage());
             }
