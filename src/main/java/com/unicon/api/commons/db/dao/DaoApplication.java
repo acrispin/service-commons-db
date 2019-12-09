@@ -35,7 +35,7 @@ public abstract class DaoApplication<T, U> extends DaoBase<T, U> {
     }
 
     @Override
-    public synchronized SqlSessionFactory getSqlSessionFactoryInner() {
+    public synchronized SqlSessionFactory getSqlSessionFactoryInnerSingle() {
         if (sqlSessionFactory == null) {
             sqlSessionFactory  = init();
         }

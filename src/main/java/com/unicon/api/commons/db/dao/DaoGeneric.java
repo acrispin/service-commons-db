@@ -32,7 +32,7 @@ public abstract class DaoGeneric<U> {
     /**
      * @return SqlSessionFactory
      */
-    protected abstract SqlSessionFactory getSqlSessionFactoryInner();
+    protected abstract SqlSessionFactory getSqlSessionFactoryInnerSingle();
 
     /**
      * @return SqlSessionFactory
@@ -59,16 +59,16 @@ public abstract class DaoGeneric<U> {
      */
     protected abstract Class<U> getMapperType();
 
-    protected SqlSessionFactory getSqlSessionFactoryInnerGeneral() {
+    protected SqlSessionFactory getSqlSessionFactoryInner() {
         switch (getConnectionType()) {
             case SINGLE:
-                return getSqlSessionFactoryInner();
+                return getSqlSessionFactoryInnerSingle();
             case SDC:
                 return getSqlSessionFactoryInnerSdc(getIdMarca());
             case CMD:
                 return getSqlSessionFactoryInnerCmd(getIdMarca());
         }
-        return getSqlSessionFactoryInner();
+        return getSqlSessionFactoryInnerSingle();
     }
 
     private Class<?>[] getParamsClass(Object... params) {
@@ -90,7 +90,7 @@ public abstract class DaoGeneric<U> {
         List<T> lista;
         Class<?>[] paramsClass = getParamsClass(params);
 
-        try (SqlSession session = getSqlSessionFactoryInnerGeneral().openSession(true)) {
+        try (SqlSession session = getSqlSessionFactoryInner().openSession(true)) {
             U mapper = session.getMapper(getMapperType());
             Method method = mapper.getClass().getDeclaredMethod(methodName, paramsClass);
             lista = (List<T>) method.invoke(mapper, params);
@@ -116,7 +116,7 @@ public abstract class DaoGeneric<U> {
         List<T> lista;
         Class<?>[] paramsClass = new Class[1];
         paramsClass[0] = Map.class;
-        try (SqlSession session = getSqlSessionFactoryInnerGeneral().openSession(true)) {
+        try (SqlSession session = getSqlSessionFactoryInner().openSession(true)) {
             U mapper = session.getMapper(getMapperType());
             Method method = mapper.getClass().getDeclaredMethod(methodName, paramsClass);
             lista = (List<T>) method.invoke(mapper, params);
@@ -137,7 +137,7 @@ public abstract class DaoGeneric<U> {
     protected <T> List<T> queryList(String methodName) {
         List<T> lista;
         Class<?>[] paramsClass = NOPARAMS;
-        try (SqlSession session = getSqlSessionFactoryInnerGeneral().openSession(true)) {
+        try (SqlSession session = getSqlSessionFactoryInner().openSession(true)) {
             U mapper = session.getMapper(getMapperType());
             Method method = mapper.getClass().getDeclaredMethod(methodName, paramsClass);
             lista = (List<T>) method.invoke(mapper);
@@ -161,7 +161,7 @@ public abstract class DaoGeneric<U> {
         T object = null;
         Class<?>[] paramsClass = new Class[1];
         paramsClass[0] = Map.class;
-        try (SqlSession session = getSqlSessionFactoryInnerGeneral().openSession(true)) {
+        try (SqlSession session = getSqlSessionFactoryInner().openSession(true)) {
             U mapper = session.getMapper(getMapperType());
             Method method = mapper.getClass().getDeclaredMethod(methodName, paramsClass);
             if (params != null) {
@@ -192,7 +192,7 @@ public abstract class DaoGeneric<U> {
                                 Object... params) {
         T object = null;
         Class<?>[] paramsClass = getParamsClass(params);
-        try (SqlSession session = getSqlSessionFactoryInnerGeneral().openSession(true)) {
+        try (SqlSession session = getSqlSessionFactoryInner().openSession(true)) {
             U mapper = session.getMapper(getMapperType());
             Method method = mapper.getClass().getDeclaredMethod(methodName, paramsClass);
             if (params != null) {
@@ -224,7 +224,7 @@ public abstract class DaoGeneric<U> {
         T object = null;
         Class<?>[] paramsClass = new Class[1];
         paramsClass[0] = type;
-        try (SqlSession session = getSqlSessionFactoryInnerGeneral().openSession(true)) {
+        try (SqlSession session = getSqlSessionFactoryInner().openSession(true)) {
             U mapper = session.getMapper(getMapperType());
             Method method = mapper.getClass().getDeclaredMethod(methodName, paramsClass);
             if (bean != null) {
@@ -294,7 +294,7 @@ public abstract class DaoGeneric<U> {
      */
     protected <T, V> V executeDml(String methodName,
                                   Class<?> paramClass, T param) {
-        try (SqlSession session = getSqlSessionFactoryInnerGeneral().openSession(false)) {
+        try (SqlSession session = getSqlSessionFactoryInner().openSession(false)) {
             V result = executeDml(session, methodName, paramClass, param);
             if (result != null) {
                 session.commit();
@@ -352,7 +352,7 @@ public abstract class DaoGeneric<U> {
      * @return true si se ejecuta de forma correcta, caso contrario false
      */
     protected <T> T executeDml(String methodName, Object... params) {
-        try (SqlSession session = getSqlSessionFactoryInnerGeneral().openSession(false)) {
+        try (SqlSession session = getSqlSessionFactoryInner().openSession(false)) {
             T result = executeDml(session, methodName, params);
             if (result != null) {
                 session.commit();
