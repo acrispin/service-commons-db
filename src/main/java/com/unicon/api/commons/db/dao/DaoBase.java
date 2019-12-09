@@ -26,6 +26,13 @@ public abstract class DaoBase<T, U> extends DaoGeneric<U> {
      */
     protected abstract Class<T> getClassType();
 
+    public DaoBase() {
+    }
+
+    public DaoBase(String idMarca) {
+        super(idMarca);
+    }
+
     /**
      * Ejecuta una operación <code>select</code> para obtener una lista de objetos. Se requiere que en mapper se tenga la operación <code>selectAll</code>
      *

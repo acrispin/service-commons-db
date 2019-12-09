@@ -19,6 +19,24 @@ import java.util.Map;
  */
 public abstract class DaoGeneric<U> {
 
+    private String idMarca;
+
+    public String getIdMarca() {
+        return idMarca;
+    }
+
+    public void setIdMarca(String idMarca) {
+        this.idMarca = idMarca;
+    }
+
+    public DaoGeneric() {
+        this.idMarca = "";
+    }
+
+    public DaoGeneric(String idMarca) {
+        this.idMarca = idMarca;
+    }
+
     /**
      *
      */
@@ -48,11 +66,6 @@ public abstract class DaoGeneric<U> {
      * @return SqlSessionFactory
      */
     protected abstract EConnectionType getConnectionType();
-
-    /**
-     * @return idMarca
-     */
-    protected abstract String getIdMarca();
 
     /**
      * @return Mapper type

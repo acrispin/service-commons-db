@@ -30,8 +30,15 @@ public abstract class DaoApplication<T, U> extends DaoBase<T, U> {
     private static final Map<String, SqlSessionFactory> SQL_SESSION_FACTORY_MAP_SDC = new HashMap<>();
     private static final Map<String, SqlSessionFactory> SQL_SESSION_FACTORY_MAP_CMD = new HashMap<>();
 
-    protected DaoApplication() {
-        throw new UnsupportedOperationException();
+//    protected DaoApplication() {
+//        throw new UnsupportedOperationException();
+//    }
+
+    public DaoApplication() {
+    }
+
+    public DaoApplication(String idMarca) {
+        super(idMarca);
     }
 
     @Override
