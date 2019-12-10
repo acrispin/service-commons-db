@@ -108,7 +108,7 @@ public abstract class DaoApplication<T, U> extends DaoBase<T, U> {
         try {
             ResourceBundle bundle = ResourceBundle.getBundle("application");
             Properties defaultProps = new Properties();
-            
+
             String urlFormat, url;
             if (bundle.getString("database.test.port").isEmpty()) {
                 urlFormat = bundle.getString("database.format.url");

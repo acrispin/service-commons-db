@@ -13,9 +13,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *
- * @author acrispin
  * @param <U> Mapper a utilizar por la clase
+ * @author acrispin
  */
 public abstract class DaoGeneric<U> {
 
@@ -99,7 +98,8 @@ public abstract class DaoGeneric<U> {
      * @param params     parámetros a pasar al método a invocar
      * @return lista de elementos del tipo T
      */
-    protected <T> List<T> queryList(String methodName, Object... params) {
+    protected <T> List<T> queryList(String methodName,
+                                    Object... params) {
         List<T> lista;
         Class<?>[] paramsClass = getParamsClass(params);
 
@@ -169,7 +169,8 @@ public abstract class DaoGeneric<U> {
      * @param params     parámetros a pasar al método a invocar
      * @return objeto del tipo T
      */
-    protected <T> T queryObject(Class<T> type, String methodName,
+    protected <T> T queryObject(Class<T> type,
+                                String methodName,
                                 Map<String, Object> params) {
         T object = null;
         Class<?>[] paramsClass = new Class[1];
@@ -201,7 +202,8 @@ public abstract class DaoGeneric<U> {
      * @param params     parámetros a pasar al método a invocar
      * @return objeto del tipo T
      */
-    protected <T> T queryObject(Class<T> type, String methodName,
+    protected <T> T queryObject(Class<T> type,
+                                String methodName,
                                 Object... params) {
         T object = null;
         Class<?>[] paramsClass = getParamsClass(params);
@@ -233,7 +235,9 @@ public abstract class DaoGeneric<U> {
      * @param bean       objeto cuyos atributos seran usados dentro de la consulta
      * @return objeto del tipo T
      */
-    protected <T> T queryObject(Class<T> type, String methodName, T bean) {
+    protected <T> T queryObject(Class<T> type,
+                                String methodName,
+                                T bean) {
         T object = null;
         Class<?>[] paramsClass = new Class[1];
         paramsClass[0] = type;
@@ -269,8 +273,10 @@ public abstract class DaoGeneric<U> {
      * @param paramClass clase del parámetro, para multiparametros usar Map
      * @return Objeto del tipo V
      */
-    protected <T, V> V executeDml(SqlSession session, String methodName,
-                                  Class<?> paramClass, T param) {
+    protected <T, V> V executeDml(SqlSession session,
+                                  String methodName,
+                                  Class<?> paramClass,
+                                  T param) {
 
         Class<?>[] paramsClass = new Class[1];
         paramsClass[0] = paramClass;
@@ -301,7 +307,8 @@ public abstract class DaoGeneric<U> {
      * @return true si se ejecuta de forma correcta, caso contrario false
      */
     protected <T, V> V executeDml(String methodName,
-                                  Class<?> paramClass, T param) {
+                                  Class<?> paramClass,
+                                  T param) {
         try (SqlSession session = getSqlSessionFactoryInner().openSession(false)) {
             V result = executeDml(session, methodName, paramClass, param);
             if (result != null) {
@@ -329,7 +336,8 @@ public abstract class DaoGeneric<U> {
      * @param params     parámetros a pasar al método a invocar
      * @return objeto del tipo T
      */
-    protected <T> T executeDml(SqlSession session, String methodName,
+    protected <T> T executeDml(SqlSession session,
+                               String methodName,
                                Object... params) {
         T result = null;
         Class<?>[] paramsClass = getParamsClass(params);
@@ -356,9 +364,73 @@ public abstract class DaoGeneric<U> {
      * @param params     parámetros de la consulta
      * @return true si se ejecuta de forma correcta, caso contrario false
      */
-    protected <T> T executeDml(String methodName, Object... params) {
+    protected <T> T executeDml(String methodName,
+                               Object... params) {
         try (SqlSession session = getSqlSessionFactoryInner().openSession(false)) {
             T result = executeDml(session, methodName, params);
+            if (result != null) {
+                session.commit();
+                if (getLogger().isDebugEnabled()) {
+                    getLogger().debug("Ejecutando commit para methodName %s", methodName);
+                }
+            } else {
+                session.rollback();
+                if (getLogger().isDebugEnabled()) {
+                    getLogger().debug("Ejecutando rollback para methodName %s", methodName);
+                }
+            }
+            return result;
+        } catch (PersistenceException | NullPointerException ex) {
+            getLogger().error(ex.getMessage(), ex);
+            throw ex;
+        }
+    }
+
+    /**
+     * Ejecuta una sentencia DML (insert,update o delete) como parte de la transaccion a la que pertenece la sesión.
+     *
+     * @param <T>        objeto que se esta insertando
+     * @param <V>        objeto que devuelve el método
+     * @param session    sesión del ORM
+     * @param methodName nombre del método en el mapper a invocar
+     * @param param      objeto a insertar
+     * @return Objeto del tipo V
+     */
+    protected <T, V> V executeDml(SqlSession session,
+                                  String methodName,
+                                  T param) {
+
+        Class<?>[] paramsClass = new Class[1];
+        paramsClass[0] = param.getClass();
+        V result = null;
+        try {
+            U mapper = session.getMapper(getMapperType());
+            Method method = mapper.getClass().getDeclaredMethod(methodName, paramsClass);
+
+            if (param != null) {
+                result = (V) method.invoke(mapper, param);
+            } else {
+                result = (V) method.invoke(mapper);
+            }
+        } catch (PersistenceException | NullPointerException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+            getLogger().error(ex.getMessage(), ex);
+        }
+        return result;
+    }
+
+    /**
+     * Ejecuta una sentencia DML (insert,update o delete) independiente de la sesión.
+     *
+     * @param <T>        objeto que se esta insertando
+     * @param <V>        objeto que devuelve el método
+     * @param methodName nombre del método en el mapper a invocar
+     * @param param      objeto a insertar
+     * @return true si se ejecuta de forma correcta, caso contrario false
+     */
+    protected <T, V> V executeDml(String methodName,
+                                  T param) {
+        try (SqlSession session = getSqlSessionFactoryInner().openSession(false)) {
+            V result = executeDml(session, methodName, param);
             if (result != null) {
                 session.commit();
                 if (getLogger().isDebugEnabled()) {
