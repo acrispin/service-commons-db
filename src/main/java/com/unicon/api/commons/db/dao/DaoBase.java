@@ -17,6 +17,7 @@ public abstract class DaoBase<T, U> extends DaoGeneric<U> {
     private static final String INSERT = "insert";
     private static final String UPDATE = "update";
     private static final String SELECT_BY_ID = "selectById";
+    private static final String SELECT_LIST = "selectList";
     private static final String SELECT_ALL = "selectAll";
 
     /**
@@ -39,8 +40,8 @@ public abstract class DaoBase<T, U> extends DaoGeneric<U> {
      * @param params lista de objetos que son usados dentro la consulta
      * @return lista de objetos
      */
-    public List<T> selectAll(Map<String, Object> params) {
-        return queryList(SELECT_ALL, params);
+    public List<T> selectList(Map<String, Object> params) {
+        return queryList(SELECT_LIST, params);
     }
 
     /**
@@ -49,8 +50,8 @@ public abstract class DaoBase<T, U> extends DaoGeneric<U> {
      * @param params lista de objetos que son usados dentro la consulta
      * @return lista de objetos
      */
-    public List<T> selectAll(Object... params) {
-        return queryList(SELECT_ALL, params);
+    public List<T> selectList(Object... params) {
+        return queryList(SELECT_LIST, params);
     }
 
     /**
