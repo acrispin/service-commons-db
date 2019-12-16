@@ -110,9 +110,12 @@ public abstract class DaoGeneric<U> {
             if (lista == null) {
                 lista = new ArrayList<>(0);
             }
-        } catch (PersistenceException | NullPointerException | NoSuchMethodException | IllegalAccessException | InvocationTargetException ex) {
-            lista = new ArrayList<>(0);
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ex) {
+            lista = null;
+            getLogger().fatal(ex.getMessage(), ex);
+        } catch (PersistenceException | NullPointerException ex) {
             getLogger().error(ex.getMessage(), ex);
+            throw ex;
         }
 
         return lista;
@@ -134,9 +137,12 @@ public abstract class DaoGeneric<U> {
             Method method = mapper.getClass().getDeclaredMethod(methodName, paramsClass);
             lista = (List<T>) method.invoke(mapper, params);
 
-        } catch (PersistenceException | NullPointerException | NoSuchMethodException | IllegalAccessException | InvocationTargetException ex) {
-            lista = new ArrayList<>(0);
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ex) {
+            lista = null;
+            getLogger().fatal(ex.getMessage(), ex);
+        } catch (PersistenceException | NullPointerException ex) {
             getLogger().error(ex.getMessage(), ex);
+            throw ex;
         }
 
         return lista;
@@ -154,9 +160,12 @@ public abstract class DaoGeneric<U> {
             U mapper = session.getMapper(getMapperType());
             Method method = mapper.getClass().getDeclaredMethod(methodName, paramsClass);
             lista = (List<T>) method.invoke(mapper);
-        } catch (PersistenceException | NullPointerException | NoSuchMethodException | IllegalAccessException | InvocationTargetException ex) {
-            lista = new ArrayList<>(0);
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ex) {
+            lista = null;
+            getLogger().fatal(ex.getMessage(), ex);
+        } catch (PersistenceException | NullPointerException ex) {
             getLogger().error(ex.getMessage(), ex);
+            throw ex;
         }
 
         return lista;
@@ -183,13 +192,16 @@ public abstract class DaoGeneric<U> {
             } else {
                 object = (T) method.invoke(mapper);
             }
-        } catch (PersistenceException | NullPointerException | NoSuchMethodException | IllegalAccessException | InvocationTargetException ex) {
-            getLogger().error(ex.getMessage(), ex);
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ex) {
+            getLogger().fatal(ex.getMessage(), ex);
             try {
                 object = type.newInstance();
             } catch (InstantiationException | IllegalAccessException ex1) {
                 getLogger().fatal(ex1.getMessage(), ex1);
             }
+        } catch (PersistenceException | NullPointerException ex) {
+            getLogger().error(ex.getMessage(), ex);
+            throw ex;
         }
 
         return object;
@@ -216,13 +228,16 @@ public abstract class DaoGeneric<U> {
                 object = (T) method.invoke(mapper);
             }
 
-        } catch (PersistenceException | NullPointerException | NoSuchMethodException | IllegalAccessException | InvocationTargetException ex) {
-            getLogger().error(ex.getMessage(), ex);
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ex) {
+            getLogger().fatal(ex.getMessage(), ex);
             try {
                 object = type.newInstance();
             } catch (InstantiationException | IllegalAccessException ex1) {
                 getLogger().fatal(ex1.getMessage(), ex1);
             }
+        } catch (PersistenceException | NullPointerException ex) {
+            getLogger().error(ex.getMessage(), ex);
+            throw ex;
         }
 
         return object;
@@ -250,13 +265,16 @@ public abstract class DaoGeneric<U> {
                 object = (T) method.invoke(mapper);
             }
 
-        } catch (PersistenceException | NullPointerException | NoSuchMethodException | IllegalAccessException | InvocationTargetException ex) {
-            getLogger().error(ex.getMessage(), ex);
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ex) {
+            getLogger().fatal(ex.getMessage(), ex);
             try {
                 object = type.newInstance();
             } catch (InstantiationException | IllegalAccessException ex1) {
                 getLogger().fatal(ex1.getMessage(), ex1);
             }
+        } catch (PersistenceException | NullPointerException ex) {
+            getLogger().error(ex.getMessage(), ex);
+            throw ex;
         }
 
         return object;
@@ -290,8 +308,11 @@ public abstract class DaoGeneric<U> {
             } else {
                 result = (V) method.invoke(mapper);
             }
-        } catch (PersistenceException | NullPointerException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+        } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+            getLogger().fatal(ex.getMessage(), ex);
+        } catch (PersistenceException | NullPointerException ex) {
             getLogger().error(ex.getMessage(), ex);
+            throw ex;
         }
         return result;
     }
@@ -314,12 +335,12 @@ public abstract class DaoGeneric<U> {
             if (result != null) {
                 session.commit();
                 if (getLogger().isDebugEnabled()) {
-                    getLogger().debug("Ejecutando commit para methodName %s", methodName);
+                    getLogger().debug(String.format("Ejecutando commit para methodName %s", methodName));
                 }
             } else {
                 session.rollback();
                 if (getLogger().isDebugEnabled()) {
-                    getLogger().debug("Ejecutando rollback para methodName %s", methodName);
+                    getLogger().debug(String.format("Ejecutando rollback para methodName %s", methodName));
                 }
             }
             return result;
@@ -350,8 +371,11 @@ public abstract class DaoGeneric<U> {
             } else {
                 result = (T) method.invoke(mapper);
             }
-        } catch (PersistenceException | NullPointerException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+        } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+            getLogger().fatal(ex.getMessage(), ex);
+        } catch (PersistenceException | NullPointerException ex) {
             getLogger().error(ex.getMessage(), ex);
+            throw ex;
         }
         return result;
     }
@@ -371,12 +395,12 @@ public abstract class DaoGeneric<U> {
             if (result != null) {
                 session.commit();
                 if (getLogger().isDebugEnabled()) {
-                    getLogger().debug("Ejecutando commit para methodName %s", methodName);
+                    getLogger().debug(String.format("Ejecutando commit para methodName %s", methodName));
                 }
             } else {
                 session.rollback();
                 if (getLogger().isDebugEnabled()) {
-                    getLogger().debug("Ejecutando rollback para methodName %s", methodName);
+                    getLogger().debug(String.format("Ejecutando rollback para methodName %s", methodName));
                 }
             }
             return result;
@@ -412,8 +436,11 @@ public abstract class DaoGeneric<U> {
             } else {
                 result = (V) method.invoke(mapper);
             }
-        } catch (PersistenceException | NullPointerException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+        } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+            getLogger().fatal(ex.getMessage(), ex);
+        } catch (PersistenceException | NullPointerException ex) {
             getLogger().error(ex.getMessage(), ex);
+            throw ex;
         }
         return result;
     }
@@ -434,12 +461,12 @@ public abstract class DaoGeneric<U> {
             if (result != null) {
                 session.commit();
                 if (getLogger().isDebugEnabled()) {
-                    getLogger().debug("Ejecutando commit para methodName %s", methodName);
+                    getLogger().debug(String.format("Ejecutando commit para methodName %s", methodName));
                 }
             } else {
                 session.rollback();
                 if (getLogger().isDebugEnabled()) {
-                    getLogger().debug("Ejecutando rollback para methodName %s", methodName);
+                    getLogger().debug(String.format("Ejecutando rollback para methodName %s", methodName));
                 }
             }
             return result;
