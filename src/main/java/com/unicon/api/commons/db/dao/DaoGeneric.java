@@ -113,6 +113,7 @@ public abstract class DaoGeneric<U> {
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ex) {
             lista = null;
             getLogger().fatal(ex.getMessage(), ex);
+            throw new PersistenceException(ex.getMessage(), ex);
         } catch (PersistenceException | NullPointerException ex) {
             getLogger().error(ex.getMessage(), ex);
             throw ex;
@@ -140,6 +141,7 @@ public abstract class DaoGeneric<U> {
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ex) {
             lista = null;
             getLogger().fatal(ex.getMessage(), ex);
+            throw new PersistenceException(ex.getMessage(), ex);
         } catch (PersistenceException | NullPointerException ex) {
             getLogger().error(ex.getMessage(), ex);
             throw ex;
@@ -163,6 +165,7 @@ public abstract class DaoGeneric<U> {
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ex) {
             lista = null;
             getLogger().fatal(ex.getMessage(), ex);
+            throw new PersistenceException(ex.getMessage(), ex);
         } catch (PersistenceException | NullPointerException ex) {
             getLogger().error(ex.getMessage(), ex);
             throw ex;
@@ -199,6 +202,7 @@ public abstract class DaoGeneric<U> {
             } catch (InstantiationException | IllegalAccessException ex1) {
                 getLogger().fatal(ex1.getMessage(), ex1);
             }
+            throw new PersistenceException(ex.getMessage(), ex);
         } catch (PersistenceException | NullPointerException ex) {
             getLogger().error(ex.getMessage(), ex);
             throw ex;
@@ -235,6 +239,7 @@ public abstract class DaoGeneric<U> {
             } catch (InstantiationException | IllegalAccessException ex1) {
                 getLogger().fatal(ex1.getMessage(), ex1);
             }
+            throw new PersistenceException(ex.getMessage(), ex);
         } catch (PersistenceException | NullPointerException ex) {
             getLogger().error(ex.getMessage(), ex);
             throw ex;
@@ -272,6 +277,7 @@ public abstract class DaoGeneric<U> {
             } catch (InstantiationException | IllegalAccessException ex1) {
                 getLogger().fatal(ex1.getMessage(), ex1);
             }
+            throw new PersistenceException(ex.getMessage(), ex);
         } catch (PersistenceException | NullPointerException ex) {
             getLogger().error(ex.getMessage(), ex);
             throw ex;
@@ -310,6 +316,7 @@ public abstract class DaoGeneric<U> {
             }
         } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
             getLogger().fatal(ex.getMessage(), ex);
+            throw new PersistenceException(ex.getMessage(), ex);
         } catch (PersistenceException | NullPointerException ex) {
             getLogger().error(ex.getMessage(), ex);
             throw ex;
@@ -373,6 +380,7 @@ public abstract class DaoGeneric<U> {
             }
         } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
             getLogger().fatal(ex.getMessage(), ex);
+            throw new PersistenceException(ex.getMessage(), ex);
         } catch (PersistenceException | NullPointerException ex) {
             getLogger().error(ex.getMessage(), ex);
             throw ex;
@@ -438,6 +446,7 @@ public abstract class DaoGeneric<U> {
             }
         } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
             getLogger().fatal(ex.getMessage(), ex);
+            throw new PersistenceException(ex.getMessage(), ex);
         } catch (PersistenceException | NullPointerException ex) {
             getLogger().error(ex.getMessage(), ex);
             throw ex;
